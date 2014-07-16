@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>
+			Arduino Tutorial SD Card Use
+		</title>
+        <script type = "text/javascript" src = "http://dygraphs.com/dygraph-combined.js"> </script>
+		<script>
+		    // Use ip address when reading from hard drive
+		    var myIPaddress = "http://209.195.93.53:888/";
+		    // Use "/" string when using from controller web site
+		   // var myIPaddress = "/";
+		    var analogAlljson = "analogAlljson";
+		    var digitalAlljson = "digitalAlljson";
+		    var sampleInterval = 500;
+
+		    var boardStatus = [false, false, false, false, false, false, false, false, false, false, false, false, false, false];
+			var xmlhttp;
+            var index = 0;
+            
+			//xmlhttp = new XMLHttpRequest();
+			//xmlhttp.onreadystatechange = function() {
+			//	if( (xmlhttp.readyState == 4) && (xmlhttp.status == 200) ) {
+            //        console.log( "Response : " + xmlhttp.responseText );
+			//		buffer = xmlhttp.responseText.split(",");
+            //        for( index=0; index<buffer.length; ++index ) {
+            //            boardStatus[index] = (buffer[index]=="1")?true:false;
+            //        }
+            //        console.log( boardStatus );
+            //        if( boardStatus[0] == true ) { 
+            //            console.log( "LED1 ON" );
+            //            document.getElementById( "led_0" ).className = "ledStatusOn";
+            //        } else { 
+            //            console.log( "LED1 OFF" ); 
+            //            document.getElementById( "led_0" ).className = "ledStatusOff";
+            //        }
+            //        if( boardStatus[4] == true ) { 
+            //            console.log( "OUT0 ON" ); 
+            //            document.getElementById( "out_0" ).className = "outButtonActive";
+            //        } else { 
+            //            console.log( "OUT0 OFF" ); 
+            //            document.getElementById( "out_0" ).className = "outButtonInactive";
+            //        }
+            //        if( boardStatus[5] == true ) { 
+            //            console.log( "OUT1 ON" ); 
+            //            document.getElementById( "out_1" ).className = "outButtonActive";
+            //        } else { 
+            //            console.log( "OUT1 OFF" ); 
+            //            document.getElementById( "out_1" ).className = "outButtonInactive";
+            //        }
+            //        if( boardStatus[6] == true ) { 
+            //            console.log( "OUT2 ON" ); 
+            //            document.getElementById( "out_2" ).className = "outButtonActive";
+            //        } else { 
+            //            console.log( "OUT2 OFF" ); 
+            //            document.getElementById( "out_2" ).className = "outButtonInactive";
+            //        }
+            //        if( boardStatus[7] == true ) { 
+            //            console.log( "OUT3 ON" ); 
+            //            document.getElementById( "out_3" ).className = "outButtonActive";
+            //        } else { 
+            //            console.log( "OUT3 OFF" ); 
+            //            document.getElementById( "out_3" ).className = "outButtonInactive";
+            //        }
+            //        if( boardStatus[8] == true ) { 
+            //            console.log( "OUT4 ON" ); 
+            //            document.getElementById( "out_4" ).className = "outButtonActive";
+            //        } else { 
+            //            console.log( "OUT4 OFF" ); 
+            //            document.getElementById( "out_4" ).className = "outButtonInactive";
+            //        }
+            //        if( boardStatus[9] == true ) { 
+            //            console.log( "OUT5 ON" ); 
+            //            document.getElementById( "out_5" ).className = "outButtonActive";
+            //        } else { 
+            //            console.log( "OUT5 OFF" ); 
+            //            document.getElementById( "out_5" ).className = "outButtonInactive";
+            //        }
+            //        if( boardStatus[10] == true ) { 
+            //            console.log( "OUT6 ON" ); 
+            //            document.getElementById( "out_6" ).className = "outButtonActive";
+            //        } else { 
+            //            console.log( "OUT6 OFF" ); 
+            //            document.getElementById( "out_6" ).className = "outButtonInactive";
+            //        }
+            //        if( boardStatus[11] == true ) { 
+            //            console.log( "OUT7 ON" ); 
+            //            document.getElementById( "out_7" ).className = "outButtonActive";
+            //        } else { 
+            //            console.log( "OUT7 OFF" ); 
+            //            document.getElementById( "out_7" ).className = "outButtonInactive";
+            //        }
+            //        if( boardStatus[12] == true ) { 
+            //            console.log( "OUT8 ON" ); 
+            //            document.getElementById( "out_8" ).className = "outButtonActive";
+            //        } else { 
+            //            console.log( "OUT8 OFF" ); 
+            //            document.getElementById( "out_8" ).className = "outButtonInactive";
+            //        }
+            //        if( boardStatus[13] == true ) { 
+            //            console.log( "OUT9 ON" ); 
+            //            document.getElementById( "out_9" ).className = "outButtonActive";
+            //        } else { 
+            //            console.log( "OUT9 OFF" ); 
+            //            document.getElementById( "out_9" ).className = "outButtonInactive";
+            //        }
+			//	}
+		    //}
+
+            function GetArduinoDigitalInputs() {
+                nocache = "&nocache=" + Math.random() * 1000000;
+                var xmlhttp;
+                if (window.XMLHttpRequest) { xmlhttp = new XMLHttpRequest(); }
+                else { xmlhttp = new ActiveXObject("Microsoft.XMLHTTP"); }
+                xmlhttp.onreadystatechange = function () {
+                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                        var jsonObj = JSON.parse(xmlhttp.responseText);
+                        if (jsonObj.digital0 == 0) {
+                            console.log("LED1 ON");
+                            document.getElementById("digital0").className = "outButtonActive";
+                        } else {
+                            console.log("LED1 OFF");
+                            document.getElementById("digital0").className = "outButtonInactive";
+                        }
+                        if (jsonObj.digital1 == 0) {
+                            console.log("LED1 ON");
+                            document.getElementById("digital1").className = "outButtonActive";
+                        } else {
+                            console.log("LED1 OFF");
+                            document.getElementById("digital1").className = "outButtonInactive";
+                        }
+                        if (jsonObj.digital2 == 0) {
+                            console.log("LED1 ON");
+                            document.getElementById("digital2").className = "outButtonActive";
+                        } else {
+                            console.log("LED1 OFF");
+                            document.getElementById("digital2").className = "outButtonInactive";
+                        }
+                        if (jsonObj.digital3 == 0) {
+                            console.log("LED1 ON");
+                            document.getElementById("digital3").className = "outButtonActive";
+                        } else {
+                            console.log("LED1 OFF");
+                            document.getElementById("digital3").className = "outButtonInactive";
+                        }
+                    }
+                }
+                xmlhttp.open("GET", myIPaddress + digitalAlljson + nocache, true);
+                xmlhttp.send();
+            }
+
+            
+            function getDeviceStatus() {
+                console.log( "Onload quering device status...." );
+               // xmlhttp.open("GET", myIPaddress + "getDeviceStatus.php", true);
+               // xmlhttp.send();
+            }
+
+            function triggerInput(outButton) {
+                xmlhttp = new XMLHttpRequest();
+                if (window.XMLHttpRequest) { xmlhttp = new XMLHttpRequest(); }
+                else { xmlhttp = new ActiveXObject("Microsoft.XMLHTTP"); }
+
+				if( boardStatus[outButton.name] == false ) {
+					boardStatus[outButton.name] = true;
+					xmlhttp.open("GET", myIPaddress + outButton.id , true);
+					xmlhttp.send();
+					// ledButton.className = "ledStatusOn";
+					console.log( "Triggering ON pin" + outButton.id );
+				}
+				else {
+					boardStatus[outButton.name] = false;
+					xmlhttp.open("GET", myIPaddress + outButton.id , true);
+					xmlhttp.send();
+					// ledButton.className = "ledStatusOff";
+					console.log( "Triggering OFF led" + outButton.id );
+				}
+				GetArduinoDigitalInputs();
+			}
+		</script>
+		<script>
+			// variabel holding device file path
+			// var devFile = "./data/10.225.16.55.csv";
+			var dataTrace = [ 
+								[ 0, 0, 0, 0, 0 ]
+							];
+			var dataDisp  = [ 
+								[ ,,,,, ]
+							];
+			var dataIndex = 0.00;
+			
+			//reponse from device
+			var buffer = "";
+			
+			// create object to plot graph
+			var scope;
+			var channelVisibility = [ false, false, false, false ];
+			function initGraph( hCanvas ) {
+				//alert( canvas_div );
+				scope = new Dygraph(
+					hCanvas,
+					dataDisp,
+					{
+						visibility : channelVisibility,
+						valueRange : [ -0.4, 5.1 ],
+						drawAxesAtZero : true,
+                        labels : [ "time", "channel0", "channel1", "channel2", "channel3" ]
+					}
+				)
+			}
+			
+			// plot graphs of each channel
+			function plotGraph( el ) {
+				//scope.setVisibility( el.id, el.checked );
+				if( channelVisibility[ el.id ] == false ) {
+					channelVisibility[ el.id ] = true;
+					//document.getElementById( el.id ).class = 'channel_selected';
+					el.className = "channelButtonActive";
+				}
+				else {
+					channelVisibility[ el.id ] = false;
+					//document.getElementById( el.id ).class = 'channel_unselected';
+					el.className = "channelButtonInactive";
+				}				
+				scope.setVisibility( el.id, channelVisibility[ el.id ] );
+			}
+					
+			function getDataFromDevice() {
+			    nocache = "&nocache=" + Math.random() * 1000000;
+				var sampleTime = dataIndex;
+                var analogVals = [ 0, 0, 0, 0, 0 ]; // only for five channels 0-4
+                var channelIdx = 0;
+				
+				//AJAX code
+                var xmlhttp;
+                if (window.XMLHttpRequest)
+                { xmlhttp = new XMLHttpRequest(); }
+                else { xmlhttp = new ActiveXObject("Microsoft.XMLHTTP"); }
+				xmlhttp.onreadystatechange = function() {
+					//alert( "ready state = " + xmlhttp.readyState );
+					//alert( "status = " + xmlhttp.status );
+					if( (xmlhttp.readyState == 4) && (xmlhttp.status == 200) ) {
+						// console.log( xmlhttp );
+						// document.getElementById("data").innerHTML = xmlhttp.responseText;
+					    var jsonObj = JSON.parse(xmlhttp.responseText);
+					    var sampleCh0Val = jsonObj.analog0 * 5 / 1023;
+					    var sampleCh1Val = jsonObj.analog1 * 5 / 1023;
+					    var sampleCh2Val = jsonObj.analog2 * 5 / 1023;
+					    var sampleCh3Val = jsonObj.analog3 * 5 / 1023;
+
+                        // console.log( sampleCh0Val, sampleCh1Val, sampleCh2Val, sampleCh3Val, sampleCh4Val );
+                
+				
+                        dataTrace.push( [   sampleTime, 
+                                            sampleCh0Val, 
+                                            sampleCh1Val,
+                                            sampleCh2Val,
+                                            sampleCh3Val,
+                                        ] );
+							
+                        var siz = dataDisp.push( [ 	sampleTime, 
+                                                    sampleCh0Val, 
+                                                    sampleCh1Val,
+                                                    sampleCh2Val,
+                                                    sampleCh3Val,
+                                                    ] );
+                        if( siz > 50 ) {
+                            dataDisp.shift();
+                        }
+                        dataIndex += 0.1;
+					}
+				};
+				xmlhttp.open("GET", myIPaddress + analogAlljson + nocache, true);
+				xmlhttp.send();
+			}
+			
+			function updatePlot( ) {
+				//alert( "Updating..." );
+				getDataFromDevice();
+				scope.updateOptions( { file : dataDisp } );
+			}
+			
+			var measure = 0;
+			var hAuto;
+			function startStop( buttonId ) {
+				//var button_SS = document.getElementById( 'startStopButton' );
+				if( measure == 0 ) {
+					measure = 1;
+					//alert( "Start measuring" );
+					dataTrace = [ ];
+					dataDisp  = [ ];
+					scope.updateOptions( { showRangeSelector : false } );
+					scope.resetZoom();
+					hAuto = self.setInterval(function () { updatePlot() }, sampleInterval);
+					buttonId.className = "startStopButtonOn";
+                    buttonId.value = "STOP";
+					//consloe.log( "Started.." );
+				}
+				else {
+					measure = 0;
+					//alert( "Stop measuring" );
+					hAuto = self.clearInterval( hAuto );
+					//now display the entire data acquired in this lap
+					scope.updateOptions( { showRangeSelector : true } );
+					scope.updateOptions( { file : dataTrace } );
+                    buttonId.className = "startStopButtonOff";
+					buttonId.value = "START";
+					//reset data index
+					dataIndex = 0.00;
+					//debug
+					// console.log( dataTrace );
+				}
+			}
+		</script>
+		
+        <style>
+			input.ledStatusOff{
+				border-radius	: 10px 10px 10px 10px;
+				height			: 40px;
+				width			: 100px;
+				text-align		: center;
+                background-image: -moz-linear-gradient(center top , #FFFFFF, #C0C0C0 ); 
+                background-color: #F0F0F0; 
+				border			: 1px solid rgba(0, 0, 0, 0.1);
+			}
+			input.ledStatusOn{
+				border-radius	: 10px 10px 10px 10px;
+				height			: 40px;
+				width			: 100px;
+				text-align		: center;
+                background-image: -moz-linear-gradient(center top , #F0F0F0, #7FFF7F ); 
+                background-color: #7F007F; 
+				border			: 1px solid rgba(0, 0, 0, 0.1);
+			}
+            input.outButtonActive{
+				height			: 45px;
+				width			: 48px;
+				text-align		: center;
+                background-image: -moz-linear-gradient( center top, #EFEFEF, #FFFFFF ); 
+                background-color: #F0F0F0; 
+				border			: 1px solid rgba(0, 0, 0, 0.1);
+			}
+			input.outButtonInactive{
+				height			: 45px;
+				width			: 48px;
+				text-align		: center;
+                background-image: -moz-linear-gradient( center top, #FFFFFF, #C0C0C0 ); 
+                background-color: #7F007F; 
+				border			: 1px solid rgba( 0, 0, 0, 0.1);
+			}
+            input.channelButtonActive {
+				height			: 32px;
+				width			: 96px;
+				margin			: 0px;
+				text-align		: center;
+                background-image: -moz-linear-gradient( center top, #EFEFEF, #FFFFFF ); 
+                border			: 1px solid rgba(0, 0, 0, 0.1);
+			}
+			input.channelButtonInactive {
+				height			: 32px;
+				width			: 96px;
+				margin			: 0px;
+				text-align		: center;
+				background-image: -moz-linear-gradient( center top, #FFFFFF, #C0C0C0 ); 
+				border			: 2px solid rgba(0, 0, 0, 0.1);
+			}
+            input.startStopButtonOn {
+                border-radius	: 20px 20px 20px 20px;
+                height          : 96px;
+                width           : 96px;
+                text-align		: center;
+                background-image: -moz-linear-gradient( center top, #EFEFEF, #FFFFFF ); 
+				border			: 3px solid rgba(0, 0, 0, 0.1);
+            }
+            input.startStopButtonOff {
+                border-radius	: 15px 15px 15px 15px;
+                height          : 96px;
+                width           : 96px;
+                text-align		: center;
+                background-image: -moz-linear-gradient( center top, #FFFFFF, #C0C0C0 ); 
+				border			: 1px solid rgba(0, 0, 0, 0.1);
+            }
+		</style>
+	</head>
+	<body style='background: #7F7F7F' onload="getDeviceStatus()">
+        <table style="position:relative;margin-left:auto;margin-right:auto;padding-left:10px;padding-right:10px;padding-top:10px;padding-bottom:10px;">
+            <tr>
+                <td style="vertical-align:top;">
+                    <div id='ledDivision' style="width:150px;height:563px;background:#EFEFEF;border-radius: 20px 0px 0px 20px;">
+                        <table id = 'ledControls' style="margin-left:auto;margin-right:auto;padding-left:10px;padding-right:10px;padding-top:10px;padding-bottom:10px;">
+                            <tr>
+                                <td><input type="button" class="outButtonInactive" style="border-radius:10px 0px 0px 0px" id="digital0" name="0" value="D0" onClick="triggerInput( this )"/></td>
+                                <td><input type="button" class="outButtonInactive" style="border-radius:0px 10px 0px 0px" id="digital1" name="1" value="D1" onClick="triggerInput( this )"/></td>
+                            </tr>
+                                <td><input type="button" class="outButtonInactive" style="border-radius:0px 0px 0px 10px" id="digital2" name="2" value="D2" onClick="triggerInput( this )"/></td>
+                                <td><input type="button" class="outButtonInactive" style="border-radius:0px 0px 10px 0px" id="digital3" name="3" value="D3" onClick="triggerInput( this )"/></td>
+                            </tr>
+                        </table>
+                        <table style="margin-left:auto;margin-right:auto;padding-left:10px;padding-right:10px;padding-top:10px;padding-bottom:10px;">
+                            <tr>
+                                <td>
+                                    <input type="button" name="button_SS" id="button_StartStop" value="START" onclick="startStop( this )" class="startStopButtonOff" >
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>   
+                <td>
+                    <table id="mainFrame" style="position:relative;margin-left:auto;margin-right:auto;padding-left:10px;padding-right:10px;padding-top:10px;padding-bottom:10px;background:#EFEFEF;border-radius: 0px 20px 20px 0px;" >
+                        <tr>
+                            <td>
+                                <table id = 'canvasTable' class = 'dot_selection' >
+                                    <tr>
+                                        <td colspan=6>
+                                            <div id = "oscilloscope" style = "width:850px; height:475px; margin-right:50px; margin-top:10px; margin-bottom:10px;" >
+                                                <script type = "text/javascript">
+                                                initGraph( document.getElementById( "oscilloscope" ) );
+                                                </script>
+                                            </div>
+                                        </td>
+                                        <td style= 'vertical-align:top;' >
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align='center' >
+                                            <input type='button' class='channelButtonInactive' name='chnl00' id='0' onclick='plotGraph( this )' value="0" style="border-radius: 10px 0px 0px 10px;"/>
+                                            <input type='button' class='channelButtonInactive' name='chnl01' id='1' onclick='plotGraph( this )' value="1" />
+                                            <input type='button' class='channelButtonInactive' name='chnl02' id='2' onclick='plotGraph( this )' value="2" />
+                                            <input type='button' class='channelButtonInactive' name='chnl03' id='3' onclick='plotGraph( this )' value="3" style="border-radius: 0px 10px 10px 0px;"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>
