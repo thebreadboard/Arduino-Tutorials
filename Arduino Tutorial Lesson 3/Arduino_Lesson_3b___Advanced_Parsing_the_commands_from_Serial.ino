@@ -4,16 +4,15 @@ Title: Lesson 3b. Improved parsing and reduced SRAM consumption - "Case" Stateme
 Description:  Reading a line of text from the Serial Port and sending to a command process function.
 the processing function performs a real IO function for this lesson
 This sketch also demonstrates the use of compiler directives to turn on and off blocks of functionality
-
-Date created: 11th June 2014
 Created By: Peter Oakes
+Date created: 11th June 2014
 
+Updated 23 June 2016
+for IDE 1.6.9 by Peter Oakes
+Needed to re-arrange the PROGMEM statements and add some "const char" prefixes to get working again
 Additional Comments:
-
 Feel free to use and abuse as you wish, I imply NO Warranty
-
 NOTE: defines take no program space untill used so use instead of ints etc when it will never change
-
 Lessons Available
 lesson 0. How big is an Empty Sketch anyway
 Lesson 1. Reading the Serial input a line at time
@@ -74,26 +73,26 @@ goodbyReply, dosomethingReply, invalidValue
 };
 
 //welcome text
-PROGMEM prog_char welcomeTxt_0[]  = "Hello, please ask me something\ntype \"Hello\", \"Goodby\", \"web\" or \"dosomething\"\n";
-PROGMEM prog_char welcomeTxt_1[]  = "or \"pwmx where x is from 0 to 5\"\nor \"analogx where x is from 0 to 5\"\n";
-PROGMEM prog_char welcomeTxt_2[]  = "or \"digitalx where x is from 0 to 7\"\nor make up your own command\n";
+const char welcomeTxt_0[] PROGMEM = "Hello, please ask me something\ntype \"Hello\", \"Goodby\", \"web\" or \"dosomething\"\n";
+const char PROGMEM welcomeTxt_1[]  = "or \"pwmx where x is from 0 to 5\"\nor \"analogx where x is from 0 to 5\"\n";
+const char PROGMEM welcomeTxt_2[]  = "or \"digitalx where x is from 0 to 7\"\nor make up your own command\n";
 // end of welcome text
-PROGMEM prog_char webTxt_0[]  = "HTTP/1.1 200 OK\nContent-Type: text/html\nConnection: close\n";
-PROGMEM prog_char webTxt_1[]  = "<!DOCTYPE html><html><head><title>Hello from www.thebreadboard.ca</title></head><body>";
-PROGMEM prog_char webTxt_2[]  = "</body></html>\n";
+const char PROGMEM webTxt_0[]  = "HTTP/1.1 200 OK\nContent-Type: text/html\nConnection: close\n";
+const char PROGMEM webTxt_1[]  = "<!DOCTYPE html><html><head><title>Hello from www.thebreadboard.ca</title></head><body>";
+const char PROGMEM webTxt_2[]  = "</body></html>\n";
 // error text
-PROGMEM prog_char errorTxt_0[]  = "I dont understand you \nYou said: ";
-PROGMEM prog_char helloRepTxt_0[]  = "Hello back at you ";
-PROGMEM prog_char goodbyRepTxt_0[]  = "Goodby back at you ";
-PROGMEM prog_char dosomethingRepTxt_0[]  = "what would you like me to do?";
-PROGMEM prog_char invalidValueRepTxt_0[]  = "Invalid Value, setting unchanged";
+const char PROGMEM errorTxt_0[]  = "I dont understand you \nYou said: ";
+const char PROGMEM helloRepTxt_0[]  = "Hello back at you ";
+const char PROGMEM goodbyRepTxt_0[]  = "Goodby back at you ";
+const char PROGMEM dosomethingRepTxt_0[]  = "what would you like me to do?";
+const char PROGMEM invalidValueRepTxt_0[]  = "Invalid Value, setting unchanged";
 #if debug // yes you can even use compiler directives here
-PROGMEM prog_char paramIsNumeric_0[]  = "Remaining Param is numeric and = ";
-PROGMEM prog_char paramIsNotNumeric_0[]  = "Remaining Param is not numeric or invalid, value = ";
+const char PROGMEM paramIsNumeric_0[]  = "Remaining Param is numeric and = ";
+const char PROGMEM paramIsNotNumeric_0[]  = "Remaining Param is not numeric or invalid, value = ";
 #endif
 
 //array of pointers to the above message strings
-PROGMEM const char* Txt_table[] =
+const char* const Txt_table[] PROGMEM =
 {welcomeTxt_0,  welcomeTxt_1,  welcomeTxt_2,  webTxt_0,  webTxt_1,  webTxt_2, errorTxt_0, 
 helloRepTxt_0,goodbyRepTxt_0,dosomethingRepTxt_0, invalidValueRepTxt_0, 
 #if debug // yes you can even use compiler directives here 
@@ -106,37 +105,37 @@ enum {hello, goodby, dosomething, web1, web2, web3, web4, web5, analog0, analog1
 , analog3, analog4, analog5, digital0, digital1, digital2, digital3, digital4
 , digital5, digital6, digital7, pwm0, pwm1, pwm2, pwm3, pwm4, pwm5};
 //Command Strings
-PROGMEM prog_char helloCmd[]     = "Hello";
-PROGMEM prog_char goodbyCmd[]    = "Goodby";
-PROGMEM prog_char dosomethingCmd[]      = "dosomething";
-PROGMEM prog_char web1Cmd[]      = "web1";
-PROGMEM prog_char web2Cmd[]      = "web2";
-PROGMEM prog_char web3Cmd[]      = "web3";
-PROGMEM prog_char web4Cmd[]      = "web4";
-PROGMEM prog_char web5Cmd[]      = "web5";
-PROGMEM prog_char analog0Cmd[]   = "analog0";
-PROGMEM prog_char analog1Cmd[]   = "analog1";
-PROGMEM prog_char analog2Cmd[]   = "analog2";
-PROGMEM prog_char analog3Cmd[]   = "analog3";
-PROGMEM prog_char analog4Cmd[]   = "analog4";
-PROGMEM prog_char analog5Cmd[]   = "analog5";
-PROGMEM prog_char digital0Cmd[]   = "digital0";
-PROGMEM prog_char digital1Cmd[]   = "digital1";
-PROGMEM prog_char digital2Cmd[]   = "digital2";
-PROGMEM prog_char digital3Cmd[]   = "digital3";
-PROGMEM prog_char digital4Cmd[]   = "digital4";
-PROGMEM prog_char digital5Cmd[]   = "digital5";
-PROGMEM prog_char digital6Cmd[]   = "digital6";
-PROGMEM prog_char digital7Cmd[]   = "digital7";
-PROGMEM prog_char pwm0Cmd[]       = "pwm0";
-PROGMEM prog_char pwm1Cmd[]       = "pwm1";
-PROGMEM prog_char pwm2Cmd[]       = "pwm2";
-PROGMEM prog_char pwm3Cmd[]       = "pwm3";
-PROGMEM prog_char pwm4Cmd[]       = "pwm4";
-PROGMEM prog_char pwm5Cmd[]       = "pwm5";
+const char PROGMEM  helloCmd[]     = "Hello";
+const char PROGMEM  goodbyCmd[]    = "Goodby";
+const char PROGMEM  dosomethingCmd[]      = "dosomething";
+const char PROGMEM  web1Cmd[]      = "web1";
+const char PROGMEM  web2Cmd[]      = "web2";
+const char PROGMEM  web3Cmd[]      = "web3";
+const char PROGMEM  web4Cmd[]      = "web4";
+const char PROGMEM  web5Cmd[]      = "web5";
+const char PROGMEM  analog0Cmd[]   = "analog0";
+const char PROGMEM  analog1Cmd[]   = "analog1";
+const char PROGMEM analog2Cmd[]   = "analog2";
+const char PROGMEM analog3Cmd[]   = "analog3";
+const char PROGMEM analog4Cmd[]   = "analog4";
+const char PROGMEM analog5Cmd[]   = "analog5";
+const char PROGMEM digital0Cmd[]   = "digital0";
+const char PROGMEM digital1Cmd[]   = "digital1";
+const char PROGMEM digital2Cmd[]   = "digital2";
+const char PROGMEM digital3Cmd[]   = "digital3";
+const char PROGMEM digital4Cmd[]   = "digital4";
+const char PROGMEM digital5Cmd[]   = "digital5";
+const char PROGMEM digital6Cmd[]   = "digital6";
+const char PROGMEM digital7Cmd[]   = "digital7";
+const char PROGMEM pwm0Cmd[]       = "pwm0";
+const char PROGMEM pwm1Cmd[]       = "pwm1";
+const char PROGMEM pwm2Cmd[]       = "pwm2";
+const char PROGMEM pwm3Cmd[]       = "pwm3";
+const char PROGMEM pwm4Cmd[]       = "pwm4";
+const char PROGMEM  pwm5Cmd[]       = "pwm5";
 
 //array of pointers to the above command strings
-PROGMEM const char* Cmd_table[] =
+const char* const Cmd_table[] PROGMEM =
 {helloCmd,goodbyCmd,dosomethingCmd,web1Cmd,web2Cmd,web3Cmd,web4Cmd,web5Cmd,
 analog0Cmd,analog1Cmd,analog2Cmd,analog3Cmd,analog4Cmd,analog5Cmd,
 digital0Cmd,digital1Cmd,digital2Cmd,digital3Cmd,digital4Cmd,digital5Cmd,digital6Cmd,digital7Cmd,
@@ -144,9 +143,10 @@ pwm0Cmd,pwm1Cmd,pwm2Cmd,pwm3Cmd,pwm4Cmd,pwm5Cmd};
 int cmdCount = sizeof(Cmd_table) / sizeof(Cmd_table[0]);
 
 // Function that finds the string in prog mem arrays and gets it into usable space
-char* getStringfromProgMem(const char* Table[], int i)
-{
 char buffer[progMemBuffer];
+char* getStringfromProgMem(const char* const Table[], int i)
+{
+
 strcpy_P(buffer, (char*)pgm_read_word(&(Table[i])));
 return buffer;
 };
@@ -368,5 +368,3 @@ void processWebCmd(char* webText)
     Serial.print(webText);    
     Serial.print(getStringfromProgMem(Txt_table,webText2));
 }
-
-
