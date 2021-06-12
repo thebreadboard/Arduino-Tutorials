@@ -18,3 +18,5 @@ Lesson 3b. Improved parsing and reduced Flash usage, significantly less SRAM con
 Lesson 4. processing commands from Ethernet, extending what we have learned so far to include ethernet for the Wiznet and ENC26 Shields
 
 Lesson 5. Using the SD Card - Still under Construction
+
+ynvisible test. Using an Arduino to control an Electrochromic Display
